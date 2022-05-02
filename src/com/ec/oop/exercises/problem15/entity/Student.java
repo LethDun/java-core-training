@@ -4,6 +4,7 @@ import com.ec.oop.exercises.problem15.util.DateConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Student {
@@ -17,6 +18,15 @@ public class Student {
 
     public Student() {
         this.results = new ArrayList<>();
+    }
+
+    public Student(String id, String name, LocalDate birthday, int admissionYear, double entryPoint, List<Result> results) {
+        this.id = id;
+        this.name = name;
+        this.birthday = birthday;
+        this.admissionYear = admissionYear;
+        this.entryPoint = entryPoint;
+        this.results = results;
     }
 
     public Student(String id, String name, String birthday, int admissionYear, double entryPoint) {
@@ -78,6 +88,8 @@ public class Student {
 
     public void addResult(Result result) {
         results.add(result);
+        Collections.sort(results,
+                (r1, r2) -> r2.getSemester().compareTo(r1.getSemester()));
     }
 
     public void getGpa(String semester) {

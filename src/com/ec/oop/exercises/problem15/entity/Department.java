@@ -1,9 +1,7 @@
 package com.ec.oop.exercises.problem15.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Department {
 
@@ -32,14 +30,12 @@ public class Department {
     }
 
     public void showInfo() {
-        students.entrySet().stream()
-                .map(e -> e.getValue())
+        students.values().stream()
                 .forEach(System.out::println);
     }
 
     public Student findById(String id) {
-        return students.entrySet().stream()
-                .map(e -> e.getValue())
+        return students.values().stream()
                 .filter(s -> s.getId().equals(id))
                 .findFirst()
                 .orElse(null);
@@ -59,21 +55,76 @@ public class Department {
 
     public boolean studentType(String id) {
         Student student = findById(id);
-        if (student instanceof InserviceStudent) {
-            return false;
-        }
-        return true;
+        return !(student instanceof InserviceStudent);
     }
 
     public int regularStudentCounter() {
         int counter =
-                (int) students.entrySet().stream()
-                        .map(e -> e.getValue())
+                (int) students.values().stream()
                         .filter(stu -> stu instanceof InserviceStudent)
                         .count();
         return students.size() - counter;
     }
 
+    public Student highestEntryPoint() {
+        return students.values().stream()
+                .max((o1, o2) -> (int) (o1.getEntryPoint() - o2.getEntryPoint()))
+                .orElse(null);
+    }
+
+    public List<Student> getListStudentWithGpa(double gpa) {
+        return students.values().stream()
+                .filter(s -> s.getResults().get(0).getGpa() >= gpa)
+                .collect(Collectors.toList());
+    }
+
+    public Student highestGpaStudent() {
+        TreeMap<Double, Student> bestGpaStudent = new TreeMap<>();
+        students.values().stream()
+                .forEach(s -> {
+                    s.getResults().sort((r1, r2) -> (int) (r1.getGpa() - r2.getGpa()));
+                    bestGpaStudent.put(s.getResults().get(0).getGpa(), s);
+                });
+        return bestGpaStudent.lastEntry().getValue();
+    }
+
+    public List<Student> regularStudents() {
+        return students.values().stream()
+                .filter(s -> !(s instanceof InserviceStudent))
+                .collect(Collectors.toList());
+    }
+    public List<Student> inserviceStudents() {
+        return students.values().stream()
+                .filter(s -> s instanceof InserviceStudent)
+                .collect(Collectors.toList());
+    }
 
 
+    public List<InserviceStudent> findStudentsByLocation(String location) {
+        List<InserviceStudent> inserviceStudentList =
+                this.inserviceStudents().stream()
+                        .map(s -> (InserviceStudent) s)
+                        .collect(Collectors.toList());
+        return inserviceStudentList.stream()
+                .filter(s -> s.getLocation().equalsIgnoreCase(location))
+                .collect(Collectors.toList());
+    }
+
+    public List<Student> sortByAdmissionYear() {
+        return students.values().stream()
+                .sorted((s1, s2) -> s2.getAdmissionYear() - s1.getAdmissionYear())
+                .collect(Collectors.toList());
+    }
+    public void studentCountByAdmissionYear() {
+        TreeSet<Integer> yearSet = new TreeSet<>();
+        students.values().stream()
+                .forEach(s -> yearSet.add(s.getAdmissionYear()));
+        yearSet.stream()
+                .forEach(year -> {
+                    long c = students.values().stream()
+                            .filter(s -> s.getAdmissionYear() == year)
+                            .count();
+                    System.out.println(year + ": " + c);
+                });
+    }
 }
