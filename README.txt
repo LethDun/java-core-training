@@ -1,0 +1,1 @@
+All OOP exercises are in: src/com/ec/oop/exercises
