@@ -24,7 +24,6 @@ public class AppManager {
      * 0 - Experience 1 - Fresher 2 - Intern
      *
      * @param
-     * @return
      */
     public void insertEmployeeByType() {
         System.out.println("Enter type (0/1/2):");
@@ -42,16 +41,7 @@ public class AppManager {
 
         try {
             checkData(employee);
-        } catch (PhoneException e) {
-            e.printStackTrace();
-            insertEmployeeByType();
-        } catch (FullNameException e) {
-            e.printStackTrace();
-            insertEmployeeByType();
-        } catch (EmailException e) {
-            e.printStackTrace();
-            insertEmployeeByType();
-        } catch (BirthDayException e) {
+        } catch (PhoneException | FullNameException | EmailException | BirthDayException e) {
             e.printStackTrace();
             insertEmployeeByType();
         }
@@ -91,16 +81,7 @@ public class AppManager {
 
             try {
                 checkData(employee);
-            } catch (PhoneException e) {
-                e.printStackTrace();
-                update();
-            } catch (FullNameException e) {
-                e.printStackTrace();
-                update();
-            } catch (EmailException e) {
-                e.printStackTrace();
-                update();
-            } catch (BirthDayException e) {
+            } catch (PhoneException | EmailException | BirthDayException | FullNameException e) {
                 e.printStackTrace();
                 update();
             }

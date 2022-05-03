@@ -1,6 +1,4 @@
-package com.ec.oop.exercises.problem13.util;
-
-import com.ec.oop.exercises.problem13.exception.BirthDayException;
+package com.ec.oop.exercises.problem14.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
